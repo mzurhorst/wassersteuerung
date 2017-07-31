@@ -1,0 +1,49 @@
+BoxLayout:
+    orientation: "vertical"
+    padding: 5
+    
+    BoxLayout:
+        BoxLayout:
+            padding: 5
+            ToggleButton:
+                text: "Wasserkreis 1"
+#                disabled: True
+        BoxLayout:
+            padding: 5
+            ToggleButton:
+                text: "Wasserkreis 2"
+        BoxLayout:
+            padding: 5
+            ToggleButton:
+                text: "Wasserkreis 3"            
+
+    BoxLayout:
+        BoxLayout:
+            padding: 5
+            ToggleButton:
+                text: "Wasserkreis 4"
+        BoxLayout:
+            padding: 5
+            ToggleButton:
+                text: "Wasserkreis 5"
+        BoxLayout:
+            padding: 5
+            ToggleButton:
+                text: "Wasserkreis 6"
+
+    BoxLayout:
+        BoxLayout: 
+            padding: 5
+            Label:
+                text: 'Drei Zeilen\nmit\nStatusmeldungen'
+        BoxLayout:
+            size_hint_x: 0.5
+            padding: 5
+            ToggleButton:
+                text: "Automatik-\nBetrieb"
+                on_press: app.testfunktion()
+    
+
+
+
+    
