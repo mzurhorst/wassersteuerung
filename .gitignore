@@ -1,0 +1,107 @@
+### Logins, API-Keys, ... ###
+my_credentials.py
+
+
+
+### Project specific files ###
+# Cached Weather data
+*.zip
+tageswerte_*/
+Projektinformationen/
+
+# Eric IDE
+.eric6project/
+.e4p
+
+
+
+# Derived from https://www.gitignore.io/api/linux,python,windows
+
+
+### Linux OS ###
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+
+
+### Python ###
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*,cover
+.hypothesis/
+
+# Translations
+*.mo
+*.pot
+
+# PyBuilder
+target/
+
+# pyenv
+.python-version
+
+# dotenv
+.env
+
+# virtualenv
+.venv
+venv/
+ENV/
+
+
+
+### Windows ###
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
