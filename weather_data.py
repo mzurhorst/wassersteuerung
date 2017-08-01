@@ -14,11 +14,12 @@
 #         E.g., consider more days when soil keeps humidity.
 
 
-debug = True
+# Define whether or not debug messages shall be printed
+# debug = False     # debug messages surpressed
+debug = True      # debug messages enabled
 
 
 
-#from my_credentials import  owm_apikey
 # this section is here because I dislike to expose my personal API key on Github.com
 try:
     from my_credentials import  owm_apikey
