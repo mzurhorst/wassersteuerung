@@ -16,12 +16,12 @@
 import configparser
 
 config=configparser.ConfigParser()
-config.read("C:\Data\FISCH00M\Python_Workspace\Gartenbewässerung\settings.ini")
+config.read("settings.ini")
 print(config.sections())
 
 print("Beschreibung für Ventil 1 (vor Update): ", config.get("Valve1", "Description"))
 
-if config.getboolean(print("Valve2", "IsActive"):
+if config.getboolean("Valve2", "IsActive"):
 	print("Status für Ventil 2:  Aktiviert")
 else:
 	print("Status für Ventil 2:  Nicht aktiviert")
@@ -38,6 +38,6 @@ config.set("Valve1", "Description", togglevar)
 print("Beschreibung für Ventil 1 nach Update: ", config.get("Valve1", "Description"))
 
 
-configfile = open("C:\Data\FISCH00M\Python_Workspace\Gartenbewässerung\settings.ini", 'w')
+configfile = open("settings.ini", 'w')
 config.write(configfile)
 configfile.close()
