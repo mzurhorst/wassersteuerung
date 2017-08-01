@@ -19,9 +19,16 @@
 debug = True      # debug messages enabled
 
 
-# this private function is here because I dislike to expose my personal API key on Github.com
-# the function will import the API key from a local file 'my_credentials.py'
 def __get_owm_apikey():
+    """ Import the OpenWeatherMap.org API key from a local file.
+
+    This private function is here because I dislike to expose my personal API key on Github.com
+    The function will import the API key from a local file 'my_credentials.py'
+
+    Returns:
+        str:  OpenWeatherMap.org API key
+    """
+
     try:
         from my_credentials import  owm_apikey
         if debug:
@@ -30,20 +37,106 @@ def __get_owm_apikey():
         owm_apikey = "your_owm_apikey"
         print("Please create 'my_credentials.py' file with variable 'owm_apikey'")
         print("Visit http://api.openweathermap.org for details.")
+
     return owm_apikey
 
-# assemble the OpenWeatherMap API key in the JSON URL
-owm_url = 'http://api.openweathermap.org/data/2.5/forecast/daily?id=2953308&appid=' + __get_owm_apikey() + '&units=metric&lang=de&cnt=3'
 
-if debug:
-    print("DEBUG:   OpenWeatherMap.org URL:   ", owm_url)
+def __get_owm_jsonstring(days):
+    """ Load weather forecast JSON string from OpenWeatherMap.org.
+
+    This private function loads the JSON string for the weather forecast from OpenWeatherMap.org
+    The URL is hard-coded for my favorite weather station.
+
+    Args:
+        days (int): number of days for weather forecast  (1-3)
+
+    Returns:
+        str:  OpenWeatherMap.org JSON string
+    """
+
+    import requests
+
+    # assemble the OpenWeatherMap API key in the JSON URL
+    # TODO:   Make weather station variable
+    owm_url = 'http://api.openweathermap.org/data/2.5/forecast/daily?id=2953308&appid=' + __get_owm_apikey() + '&units=metric&lang=de&cnt=' + str(days)
+    if debug:
+        print("DEBUG:   OpenWeatherMap.org URL:   ", owm_url)
+        print("DEBUG:   import requests and load JSON string from owm_url")
+
+    # this section will load the JSON object;  type: class requests.models.Response
+    r = requests.get(url=owm_url)
+    if debug:
+        print("Type r:  ",  type(r))
+        print("r.JSON Objekt:  ",   r.json())
+        print("Type r.text:  ",  type(r.text))
+
+    return r.text
 
 
-print("-- Phase 2: JSON Download mit requests:  --")
+# TODO:  Define functions for the JSON parsing logic
 
-import requests
-r = requests.get(url=owm_url)
-print(r.json())
+import json
+
+#JSON Beispiel:
+
+data = json.loads(__get_owm_jsonstring(3))
+
+
+
+print("---- Abschnitt 3:  Einzelne JSON ELemente suchen ----")
+
+# Erwartete Temperaturen auslesen
+
+try:
+    temperature_today = data["list"][0]["temp"]["max"]
+except KeyError:
+    temperature_today = 15
+
+try:
+    temperature_tomorrow = data["list"][1]["temp"]["max"]
+except KeyError:
+    temperature_tomorrow= 15
+
+
+# Erwartete Niederschläge auslesen
+
+try:
+    rain_today = data["list"][0]["rain"]
+except KeyError:
+    rain_today = 0.0
+
+try:
+    rain_tomorrow = data["list"][1]["rain"]
+except KeyError:
+    rain_tomorrow = 0.0
+
+print('Wetter, heute:  ', rain_today, 'l/m², ', temperature_today, '°C')
+print('Wetter, morgen:  ', rain_tomorrow, 'l/m², ', temperature_tomorrow, '°C')
+
+
+print("---- Abschnitt 4:  Forecast-Faktor berechnen ----")
+
+
+
+def rain_forecast(rain1, rain2):
+    rain_total = 0.9 * rain1 + 0.1 * rain2
+    return rain_total
+
+variable = rain_forecast(rain_today, rain_tomorrow)
+
+print('Regen, gemittelt:  ', variable, 'l/m²')
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # commented because I don't want to download the zip file for each test
