@@ -19,24 +19,24 @@
 debug = True      # debug messages enabled
 
 
-
-# this section is here because I dislike to expose my personal API key on Github.com
-try:
-    from my_credentials import  owm_apikey
-    if debug:
-        print("DEBUG:  OpenWeatherMap.org API Key:   ",  owm_apikey)
-except ImportError:
-    owm_apikey = "your_owm_apikey"
-    print("Please create 'my_credentials.py' file with variable 'owm_apikey'")
-    print("Visit http://api.openweathermap.org for details.")
+# this private function is here because I dislike to expose my personal API key on Github.com
+# the function will import the API key from a local file 'my_credentials.py'
+def __get_owm_apikey():
+    try:
+        from my_credentials import  owm_apikey
+        if debug:
+            print("DEBUG:  OpenWeatherMap.org API Key:   ",  owm_apikey)
+    except ImportError:
+        owm_apikey = "your_owm_apikey"
+        print("Please create 'my_credentials.py' file with variable 'owm_apikey'")
+        print("Visit http://api.openweathermap.org for details.")
+    return owm_apikey
 
 # assemble the OpenWeatherMap API key in the JSON URL
-owm_url = 'http://api.openweathermap.org/data/2.5/forecast/daily?id=2953308&appid=' + owm_apikey + '&units=metric&lang=de&cnt=3'
+owm_url = 'http://api.openweathermap.org/data/2.5/forecast/daily?id=2953308&appid=' + __get_owm_apikey() + '&units=metric&lang=de&cnt=3'
 
 if debug:
     print("DEBUG:   OpenWeatherMap.org URL:   ", owm_url)
-
-
 
 
 print("-- Phase 2: JSON Download mit requests:  --")
