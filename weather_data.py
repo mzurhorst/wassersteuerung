@@ -65,10 +65,6 @@ def __get_owm_jsonstring(days):
 
     # this section will load the JSON object;  type: class requests.models.Response
     r = requests.get(url=owm_url)
-    if debug:
-        print("Type r:  ",  type(r))
-        print("r.JSON Objekt:  ",   r.json())
-        print("Type r.text:  ",  type(r.text))
 
     return r.text
 
