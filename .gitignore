@@ -13,6 +13,8 @@ Projektinformationen/
 .eric6project/
 *.e4p
 
+# Wing IDE
+*.wpr
 
 
 # Derived from https://www.gitignore.io/api/linux,python,windows
