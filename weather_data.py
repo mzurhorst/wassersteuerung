@@ -13,11 +13,17 @@
 # TODO:   Add customization options based on particular soil conditions.
 #         E.g., consider more days when soil keeps humidity.
 
+
+debug = True
+
+
+
 #from my_credentials import  owm_apikey
 # this section is here because I dislike to expose my personal API key on Github.com
 try:
     from my_credentials import  owm_apikey
-    print("OpenWeatherMap.org API Key:  ",  owm_apikey)
+    if debug:
+        print("DEBUG:  OpenWeatherMap.org API Key:   ",  owm_apikey)
 except ImportError:
     owm_apikey = "your_owm_apikey"
     print("Please create 'my_credentials.py' file with variable 'owm_apikey'")
@@ -25,11 +31,13 @@ except ImportError:
 
 # assemble the OpenWeatherMap API key in the JSON URL
 owm_url = 'http://api.openweathermap.org/data/2.5/forecast/daily?id=2953308&appid=' + owm_apikey + '&units=metric&lang=de&cnt=3'
-print("-- Phase 1: Initialisieren:  --")
+
+if debug:
+    print("DEBUG:   OpenWeatherMap.org URL:   ", owm_url)
 
 
 
-#past_json= 'http://api.openweathermap.org/data/2.5/forecast/daily?id=2953308&appid=b8ee3e33f288f292b85b1d3b139d8f30&units=metric&lang=de&cnt=3'
+
 print("-- Phase 2: JSON Download mit requests:  --")
 
 import requests
