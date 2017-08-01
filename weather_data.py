@@ -1,17 +1,17 @@
 #!/usr/bin/python3
 #
-#File              :  weather_data.py
+#File           :  weather_data.py
 #Author         :  Marcus Zurhorst
-#Email           :  marcuszurhorst@gmail.com
+#Email          :  marcuszurhorst@gmail.com
 #License        :  MIT License
-#Copyright    :  (c) 2017 Marcus Zurhorst
+#Copyright      :  (c) 2017 Marcus Zurhorst
 #
-#Description  :  This module provides functions to fetch weather data from
-#                        OpenWeatherMap.org and DWD.de and calculates weighting
-#                        factors for the watering duration based weather conditions.
+#Description    :  This module provides functions to fetch weather data from
+#                  OpenWeatherMap.org and DWD.de and calculates weighting
+#                  factors for the watering duration based weather conditions.
 
-# TODO    Add customization options based on particular soil conditions.
-#               E.g., consider more days when soil keeps humidity.
+# TODO:   Add customization options based on particular soil conditions.
+#         E.g., consider more days when soil keeps humidity.
 
 #from my_credentials import  owm_apikey
 # this section is here because I dislike to expose my personal API key on Github.com
@@ -35,6 +35,7 @@ print("-- Phase 2: JSON Download mit requests:  --")
 import requests
 r = requests.get(url=owm_url)
 print(r.json())
+
 
 # commented because I don't want to download the zip file for each test
 # TODO:  wrap this into functions and call from main.py on demand
