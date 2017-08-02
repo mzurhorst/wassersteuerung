@@ -48,13 +48,19 @@ def __get_owm_jsonstring(days):
     The URL is hard-coded for my favorite weather station.
 
     Args:
-        days (int): number of days for weather forecast  (1-3)
+        days (int): number of days for weather forecast  (allowable range:  1-3)
 
     Returns:
         str:  OpenWeatherMap.org JSON string
     """
 
     import requests
+    
+    # confirm that 'days' is in the allowable range and fix it if required
+    if days < 1:
+        days = 1
+    id days > 3:
+        days = 3
 
     # assemble the OpenWeatherMap API key in the JSON URL
     # TODO:   Make weather station variable
