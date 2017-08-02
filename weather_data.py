@@ -159,25 +159,6 @@ if debug:
 
 
 
-#def rain_forecast(rain1, rain2):
-    #rain_total = 0.9 * rain1 + 0.1 * rain2
-    #return rain_total
-
-#variable = rain_forecast(rain_today, rain_tomorrow)
-
-#print('Regen, gemittelt:  ', variable, 'l/m²')
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # commented because I don't want to download the zip file for each test
