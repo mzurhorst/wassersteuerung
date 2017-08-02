@@ -53,14 +53,15 @@ def __get_owm_jsonstring(days):
     Returns:
         str:  OpenWeatherMap.org JSON string
     """
-
-    import requests
     
     # confirm that 'days' is in the allowable range and fix it if required
     if days < 1:
         days = 1
-    id days > 3:
+    if days > 3:
         days = 3
+
+    
+    import requests
 
     # assemble the OpenWeatherMap API key in the JSON URL
     # TODO:   Make weather station variable
@@ -75,58 +76,90 @@ def __get_owm_jsonstring(days):
     return r.text
 
 
-# TODO:  Define functions for the JSON parsing logic
+def __get_owm_forecast_temperature(progression):
+    """ Calculates the forecast temperature from OpenWeatherMap.org data.
 
-import json
+    This private function calculates the temperature forecast from the OpenWeatherMap.org data.
+    
+    Args:
+        progression (float): weighting factor for forecast data    (allowable range:  0.6 - 0.99)
 
-#JSON Beispiel:
+    Returns:
+        str:  OpenWeatherMap.org JSON string
+    """
 
-data = json.loads(__get_owm_jsonstring(3))
+    # confirm that 'progression' is in the allowable range and fix it if required
+    if progression < 0.6:
+        progression = 0.6
+    if progression > 0.99:
+        progression = 0.99
+
+
+    import json
+    
+    # TODO:  2 days is hard-coded for the moment. Needs to read a setting from ini file
+    data = json.loads(__get_owm_jsonstring(2))
+
+    print("---- Abschnitt 3:  Einzelne JSON ELemente suchen ----")
+
+    # Erwartete Temperaturen auslesen
+
+    try:
+        temperature_today = data["list"][0]["temp"]["max"]
+    except KeyError:
+        temperature_today = 15
+    
+    try:
+        temperature_tomorrow = data["list"][1]["temp"]["max"]
+    except KeyError:
+        temperature_tomorrow= 15
+        
+    temperature_avg = progression * temperature_today+ (1-progression) * temperature_tomorrow
+    
+    return temperature_avg
+
+
+if debug:
+    # TODO:   Fix code below
+    progression = 0.95
+    print("DEBUG:  Progression:  ", progression,  " ;  Temperature Average:  ", __get_owm_forecast_temperature(progression), "degree C")
+    progression = 0.65
+    print("DEBUG:  Progression:  ", progression,  " ;  Temperature Average:  ", __get_owm_forecast_temperature(progression), " degree C")
+    progression = 0.80
+    print("DEBUG:  Progression:  ", progression,  " ;  Temperature Average:  ", __get_owm_forecast_temperature(progression), " degree C")
 
 
 
-print("---- Abschnitt 3:  Einzelne JSON ELemente suchen ----")
 
-# Erwartete Temperaturen auslesen
-
-try:
-    temperature_today = data["list"][0]["temp"]["max"]
-except KeyError:
-    temperature_today = 15
-
-try:
-    temperature_tomorrow = data["list"][1]["temp"]["max"]
-except KeyError:
-    temperature_tomorrow= 15
+# commented because this is currently broken
 
 
 # Erwartete Niederschläge auslesen
+#try:
+    #rain_today = data["list"][0]["rain"]
+#except KeyError:
+    #rain_today = 0.0
 
-try:
-    rain_today = data["list"][0]["rain"]
-except KeyError:
-    rain_today = 0.0
+#try:
+    #rain_tomorrow = data["list"][1]["rain"]
+#except KeyError:
+    #rain_tomorrow = 0.0
 
-try:
-    rain_tomorrow = data["list"][1]["rain"]
-except KeyError:
-    rain_tomorrow = 0.0
-
-print('Wetter, heute:  ', rain_today, 'l/m², ', temperature_today, '°C')
-print('Wetter, morgen:  ', rain_tomorrow, 'l/m², ', temperature_tomorrow, '°C')
-
-
-print("---- Abschnitt 4:  Forecast-Faktor berechnen ----")
+#print('Wetter, heute:  ', rain_today, 'l/m², ', temperature_today, '°C')
+#print('Wetter, morgen:  ', rain_tomorrow, 'l/m², ', temperature_tomorrow, '°C')
 
 
+#print("---- Abschnitt 4:  Forecast-Faktor berechnen ----")
 
-def rain_forecast(rain1, rain2):
-    rain_total = 0.9 * rain1 + 0.1 * rain2
-    return rain_total
 
-variable = rain_forecast(rain_today, rain_tomorrow)
 
-print('Regen, gemittelt:  ', variable, 'l/m²')
+#def rain_forecast(rain1, rain2):
+    #rain_total = 0.9 * rain1 + 0.1 * rain2
+    #return rain_total
+
+#variable = rain_forecast(rain_today, rain_tomorrow)
+
+#print('Regen, gemittelt:  ', variable, 'l/m²')
 
 
 
