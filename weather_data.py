@@ -48,7 +48,7 @@ def __get_owm_jsonstring(days):
     The URL is hard-coded for my favorite weather station.
 
     Args:
-        days (int): number of days for weather forecast  (allowable range:  1-3)
+        days (int):  number of days for weather forecast  (allowable range:  1-3)
 
     Returns:
         str:  OpenWeatherMap.org JSON string
@@ -80,54 +80,60 @@ def __get_owm_forecast_temperature(progression):
     """ Calculates the forecast temperature from OpenWeatherMap.org data.
 
     This private function calculates the temperature forecast from the OpenWeatherMap.org data.
+    The result depends on the progression factor and the number of forecast days.
     
     Args:
-        progression (float): weighting factor for forecast data    (allowable range:  0.6 - 0.99)
+        progression (float):  weighting factor for forecast data    (allowable range:  0.6 - 0.99)
 
     Returns:
-        str:  OpenWeatherMap.org JSON string
+        str:  forecast temperature
     """
 
     # confirm that 'progression' is in the allowable range and fix it if required
-    if progression < 0.6:
-        progression = 0.6
+    # values outside this range do not make sense
+    if progression < 0.7:
+        progression = 0.7
     if progression > 0.99:
         progression = 0.99
 
-
     import json
     
-    # TODO:  2 days is hard-coded for the moment. Needs to read a setting from ini file
-    data = json.loads(__get_owm_jsonstring(2))
+    # TODO:  3 days is hard-coded for the moment. Needs to read a setting from ini file
+    days = 3
+    data = json.loads(__get_owm_jsonstring(days))
 
-    print("---- Abschnitt 3:  Einzelne JSON ELemente suchen ----")
+    temperature_avg = 0
 
-    # Erwartete Temperaturen auslesen
-
-    try:
-        temperature_today = data["list"][0]["temp"]["max"]
-    except KeyError:
-        temperature_today = 15
-    
-    try:
-        temperature_tomorrow = data["list"][1]["temp"]["max"]
-    except KeyError:
-        temperature_tomorrow= 15
+    # Run the loop "day-1" times only because the last "loop" needs another calculation
+    for i in range(days-1):
         
-    temperature_avg = progression * temperature_today+ (1-progression) * temperature_tomorrow
+        print("DEBUG:  Variable i: ", str(i))
+        
+        try:
+            temperature = data["list"][i]["temp"]["max"]
+        except KeyError:
+            temperature = 15
+        
+        print("Temperatur an der Stelle ", str(i), ":  ", temperature)
+        temperature_avg += temperature * progression * ((1-progression)** i )
+        print("Aktuelle Durchschnittstemperatur:  ", temperature_avg)
+    
+    # now we do the missing "loop"    
+    try:
+        temperature = data["list"][days-1]["temp"]["max"]
+    except KeyError:
+        temperature = 15
+    
+    print("Temperatur an der Stelle ", str(days-1), ":  ", temperature)
+    temperature_avg += temperature * ((1-progression)** (days-1) )
+    print("Aktuelle Durchschnittstemperatur:  ", temperature_avg)
     
     return temperature_avg
 
 
 if debug:
-    # TODO:   Fix code below
-    progression = 0.95
+    progression = 0.8
     print("DEBUG:  Progression:  ", progression,  " ;  Temperature Average:  ", __get_owm_forecast_temperature(progression), "degree C")
-    progression = 0.65
-    print("DEBUG:  Progression:  ", progression,  " ;  Temperature Average:  ", __get_owm_forecast_temperature(progression), " degree C")
-    progression = 0.80
-    print("DEBUG:  Progression:  ", progression,  " ;  Temperature Average:  ", __get_owm_forecast_temperature(progression), " degree C")
-
 
 
 
