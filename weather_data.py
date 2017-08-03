@@ -103,32 +103,23 @@ def __get_owm_forecast_temperature(progression):
     data = json.loads(__get_owm_jsonstring(days))
 
     temperature_avg = 0
-
-    # Run the loop "day-1" times only because the last "loop" needs another calculation
-    for i in range(days-1):
-        
-        print("DEBUG:  Variable i: ", str(i))
+    remainder = 1 - progression
+    
+    # Run the loop "days" times
+    for i in range(days):
         
         try:
             temperature = data["list"][i]["temp"]["max"]
         except KeyError:
             temperature = 15
         
-        print("Temperatur an der Stelle ", str(i), ":  ", temperature)
-        temperature_avg += temperature * progression * ((1-progression)** i )
+        print("Temperatur an der Stelle ", str(i), ":  ", temperature)  
+        # Following equation has been provided by user Manul in the german Raspberry Pi forum
+        # http://www.forum-raspberrypi.de/Thread-python-benoetige-hilfe-bei-formeln-in-einer-schleife?pid=293772#pid293772
+        temperature_avg += temperature * (progression + remainder * (i==days-1)) * remainder**i
         print("Aktuelle Durchschnittstemperatur:  ", temperature_avg)
     
-    # now we do the missing "loop"    
-    try:
-        temperature = data["list"][days-1]["temp"]["max"]
-    except KeyError:
-        temperature = 15
-    
-    print("Temperatur an der Stelle ", str(days-1), ":  ", temperature)
-    temperature_avg += temperature * ((1-progression)** (days-1) )
-    print("Aktuelle Durchschnittstemperatur:  ", temperature_avg)
-    
-    return temperature_avg
+    return round(temperature_avg, 1)
 
 
 if debug:
