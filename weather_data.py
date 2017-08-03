@@ -76,18 +76,25 @@ def __get_owm_jsonstring(days):
     return r.text
 
 
-def __get_owm_forecast_temperature(progression):
+def __get_owm_forecast_temperature():
     """ Calculates the forecast temperature from OpenWeatherMap.org data.
 
     This private function calculates the temperature forecast from the OpenWeatherMap.org data.
     The result depends on the progression factor and the number of forecast days.
     
     Args:
-        progression (float):  weighting factor for forecast data    (allowable range:  0.6 - 0.99)
+        -
 
     Returns:
         str:  forecast temperature
     """
+
+    import settings
+    
+    # Read 'days' and 'progression' settings from settings.ini file
+    temp = settings.get_forecast_settings()
+    days = temp[0]
+    progression = temp[1]
 
     # confirm that 'progression' is in the allowable range and fix it if required
     # values outside this range do not make sense
@@ -98,8 +105,6 @@ def __get_owm_forecast_temperature(progression):
 
     import json
     
-    # TODO:  3 days is hard-coded for the moment. Needs to read a setting from ini file
-    days = 3
     data = json.loads(__get_owm_jsonstring(days))
 
     temperature_avg = 0
@@ -124,7 +129,7 @@ def __get_owm_forecast_temperature(progression):
 
 if debug:
     progression = 0.8
-    print("DEBUG:  Progression:  ", progression,  " ;  Temperature Average:  ", __get_owm_forecast_temperature(progression), "degree C")
+    print("DEBUG:  Progression:  ", progression,  " ;  Temperature Average:  ", __get_owm_forecast_temperature(), "degree C")
 
 
 
