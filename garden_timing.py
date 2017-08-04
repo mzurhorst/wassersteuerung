@@ -15,3 +15,28 @@
 # Define whether or not debug messages shall be printed
 # debug = False     # debug messages surpressed
 debug = True      # debug messages enabled
+
+
+def __append_to_workqueue():
+    """ Add short description
+    
+    Add long description
+    
+    Args:
+        -
+
+    Returns:
+        -
+    """
+    
+    # Some first trials for the queue
+    import queue
+    
+    q = queue.Queue()
+    
+    for i in range(5):
+        q.put(i)
+    
+    while not q.empty():
+        print (q.get())
+
