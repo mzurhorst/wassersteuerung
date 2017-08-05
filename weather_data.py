@@ -53,14 +53,14 @@ def __get_owm_jsonstring(days):
     Returns:
         str:  OpenWeatherMap.org JSON string
     """
-    
+
     # confirm that 'days' is in the allowable range and fix it if required
     if days < 1:
         days = 1
     if days > 3:
         days = 3
 
-    
+
     import requests
 
     # assemble the OpenWeatherMap API key in the JSON URL
@@ -81,7 +81,7 @@ def __get_owm_forecast_temperature():
 
     This private function calculates the temperature forecast from the OpenWeatherMap.org data.
     The result depends on the progression factor and the number of forecast days.
-    
+
     Args:
         -
 
@@ -90,7 +90,7 @@ def __get_owm_forecast_temperature():
     """
 
     import settings
-    
+
     # Read 'days' and 'progression' settings from settings.ini file
     temp = settings.get_forecast_settings()
     days = temp[0]
@@ -98,32 +98,32 @@ def __get_owm_forecast_temperature():
 
     # confirm that 'progression' is in the allowable range and fix it if required
     # values outside this range do not make sense
-    if progression < 0.7:
-        progression = 0.7
-    if progression > 0.99:
-        progression = 0.99
+    if progression < 0.8:
+        progression = 0.8
+    if progression > 0.92:
+        progression = 0.92
 
     import json
-    
+
     data = json.loads(__get_owm_jsonstring(days))
 
     temperature_avg = 0
     remainder = 1 - progression
-    
+
     # Run the loop "days" times
     for i in range(days):
-        
+
         try:
             temperature = data["list"][i]["temp"]["max"]
         except KeyError:
             temperature = 15
-        
-        print("Temperatur an der Stelle ", str(i), ":  ", temperature)  
+
+        print("Temperatur an der Stelle ", str(i), ":  ", temperature)
         # Following equation has been provided by user Manul in the german Raspberry Pi forum
         # http://www.forum-raspberrypi.de/Thread-python-benoetige-hilfe-bei-formeln-in-einer-schleife?pid=293772#pid293772
         temperature_avg += temperature * (progression + remainder * (i==days-1)) * remainder**i
         print("Aktuelle Durchschnittstemperatur:  ", temperature_avg)
-    
+
     return round(temperature_avg, 1)
 
 
