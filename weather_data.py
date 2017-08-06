@@ -60,7 +60,7 @@ def __get_owm_jsonstring(days):
     if days > 3:
         days = 3
 
-
+    
     import requests
 
     # assemble the OpenWeatherMap API key in the JSON URL
@@ -127,9 +127,63 @@ def __get_owm_forecast_temperature():
     return round(temperature_avg, 1)
 
 
+
+def __get_owm_forecast_precipitation():
+    """ Calculates the forecast precipitation from OpenWeatherMap.org data.
+
+    This private function calculates the temperature precipitation from the OpenWeatherMap.org data.
+    The result depends on the progression factor and the number of forecast days.
+
+    Args:
+        -
+
+    Returns:
+        str:  forecast precipitation
+    """
+
+    import settings
+
+    # Read 'days' and 'progression' settings from settings.ini file
+    temp = settings.get_forecast_settings()
+    days = temp[0]
+    progression = temp[1]
+
+    # confirm that 'progression' is in the allowable range and fix it if required
+    # values outside this range do not make sense
+    if progression < 0.8:
+        progression = 0.8
+    if progression > 0.92:
+        progression = 0.92
+
+    import json
+
+    data = json.loads(__get_owm_jsonstring(days))
+
+    precipitation_avg = 0
+    remainder = 1 - progression
+
+    # Run the loop "days" times
+    for i in range(days):
+
+        try:
+            precipitation = data["list"][i]["rain"]
+        except KeyError:
+            precipitation = 0
+
+        print("Niederschlag an der Stelle ", str(i), ":  ", precipitation)
+        # Following equation has been provided by user Manul in the german Raspberry Pi forum
+        # http://www.forum-raspberrypi.de/Thread-python-benoetige-hilfe-bei-formeln-in-einer-schleife?pid=293772#pid293772
+        precipitation_avg += precipitation * (progression + remainder * (i==days-1)) * remainder**i
+        print("Aktueller Durchschnittsniederschlag:  ", precipitation_avg)
+
+    return round(precipitation_avg, 1)
+
+
+
 if debug:
     progression = 0.8
     print("DEBUG:  Progression:  ", progression,  " ;  Temperature Average:  ", __get_owm_forecast_temperature(), "degree C")
+    print("DEBUG:  Progression:  ", progression,  " ;  Precipitation Average:  ", __get_owm_forecast_precipitation(), "liters per square meter")
 
 
 
