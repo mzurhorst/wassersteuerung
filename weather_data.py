@@ -76,14 +76,14 @@ def __get_owm_jsonstring(days):
     return r.text
 
 
-def __get_owm_forecast_temperature():
+def __get_owm_forecast_temperature(json_data=None):
     """ Calculates the forecast temperature from OpenWeatherMap.org data.
 
     This private function calculates the temperature forecast from the OpenWeatherMap.org data.
     The result depends on the progression factor and the number of forecast days.
 
     Args:
-        -
+        json_data:  json formatted OpenWeatherMap weather forecast (optional)
 
     Returns:
         str:  forecast temperature
@@ -103,9 +103,11 @@ def __get_owm_forecast_temperature():
     if progression > 0.92:
         progression = 0.92
 
-    import json
-
-    data = json.loads(__get_owm_jsonstring(days))
+    if json_data==None:
+        import json
+        data = json.loads(__get_owm_jsonstring(days))
+    else:
+        data = json_data
 
     temperature_avg = 0
     remainder = 1 - progression
@@ -128,14 +130,14 @@ def __get_owm_forecast_temperature():
 
 
 
-def __get_owm_forecast_precipitation():
+def __get_owm_forecast_precipitation(json_data=None):
     """ Calculates the forecast precipitation from OpenWeatherMap.org data.
 
     This private function calculates the temperature precipitation from the OpenWeatherMap.org data.
     The result depends on the progression factor and the number of forecast days.
 
     Args:
-        -
+        json_data:  json formatted OpenWeatherMap weather forecast (optional)
 
     Returns:
         str:  forecast precipitation
@@ -154,11 +156,13 @@ def __get_owm_forecast_precipitation():
         progression = 0.8
     if progression > 0.92:
         progression = 0.92
-
-    import json
-
-    data = json.loads(__get_owm_jsonstring(days))
-
+    
+    if json_data==None:
+        import json
+        data = json.loads(__get_owm_jsonstring(days))
+    else:
+        data = json_data
+        
     precipitation_avg = 0
     remainder = 1 - progression
 
@@ -182,8 +186,10 @@ def __get_owm_forecast_precipitation():
 
 if debug:
     progression = 0.8
-    print("DEBUG:  Progression:  ", progression,  " ;  Temperature Average:  ", __get_owm_forecast_temperature(), "degree C")
-    print("DEBUG:  Progression:  ", progression,  " ;  Precipitation Average:  ", __get_owm_forecast_precipitation(), "liters per square meter")
+    import json
+    data1 = json.loads(__get_owm_jsonstring(2))      
+    print("DEBUG:  Progression:  ", progression,  " ;  Temperature Average:  ", __get_owm_forecast_temperature(data1), "degree C")    
+    print("DEBUG:  Progression:  ", progression,  " ;  Precipitation Average:  ", __get_owm_forecast_precipitation(data1), "liters per square meter")
 
 
 
