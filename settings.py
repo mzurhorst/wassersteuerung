@@ -36,6 +36,9 @@ def get_forecast_settings():
     config.read("settings.ini")
 
 
+    # initialize variable with default value.
+    forecast_days = 0
+
     try:
         forecast_days = int(config.get("General", "forecast_days"))
     except ValueError:
@@ -44,17 +47,22 @@ def get_forecast_settings():
     list.append(forecast_days)
 
 
+    # initialize variable with default value.
+    forecast_progression = 0
+    
     try:
-        forecast_progression = config.get("General", "forecast_progression")
-    except ValueError:
+        forecast_progression = float(config.get("General", "forecast_progression"))
+    except:
         # 0.85 is a reasonable default setting.
-        foreacast_progression = 0.85
+        forecast_progression = 0.85
     list.append(forecast_progression)
 
     return list
 
 
-get_forecast_settings()
+if debug:
+    temp = get_forecast_settings()
+    print("value:",temp[1], ":", type(temp[1]))
 
 
 
