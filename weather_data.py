@@ -184,6 +184,32 @@ def __get_owm_forecast_precipitation(json_data=None):
 
 
 
+def __download_dwd_zipfile():
+    """ Downloads the zipfile from Deutscher Wetterdienst FTP server.
+
+    This private function downloads the zipfile with recent precipitation data from 
+    the Deutscher Wetterdienst FTP server.
+        
+    Returns:
+        str:  path to zipfile
+    """
+
+    import settings, wget
+    
+    # Read 'dwd_zipfile_url' setting from settings.ini file
+    dwd_settings = settings.get_dwd_settings()
+    dwd_zipfile_url   = dwd_settings[0]
+    dwd_zipfile_local = dwd_settings[1]
+    print("URL:  ", dwd_settings[0])
+    print("Local Path:  ", dwd_settings[1])
+
+    zipfile = wget.download(url=dwd_zipfile_url)
+    print(zipfile)    
+    
+    return zipfile
+
+
+
 def __get_dwd_recent_precipitation():
     """ Gets the recent precipitation from Deutscher Wetterdienst data.
 
@@ -192,20 +218,6 @@ def __get_dwd_recent_precipitation():
     Returns:
         str:  recent precipitation
     """
-
-    import settings
-
-    # Read 'dwd_zipfile_url' setting from settings.ini file
-    dwd_settings = settings.get_dwd_settings()
-    dwd_zipfile_url = dwd_settings[0]
-    print("URL:  ", dwd_settings[0])
-    print("Local Path:  ", dwd_settings[1])
-    
-    import wget
-    
-    fs = wget.download(url=dwd_zipfile_url)
-    
-    print(fs)    
     
     return
 
@@ -214,9 +226,9 @@ def __get_dwd_recent_precipitation():
 if debug:
     progression = 0.8
     import json
-    data1 = json.loads(__get_owm_jsonstring(2))      
-    print("DEBUG:  Progression:  ", progression,  " ;  Temperature Average:  ", __get_owm_forecast_temperature(data1), "degree C")    
-    print("DEBUG:  Progression:  ", progression,  " ;  Precipitation Average:  ", __get_owm_forecast_precipitation(data1), "liters per square meter")
-    __get_dwd_recent_precipitation()
+    owm_data = json.loads(__get_owm_jsonstring(2))      
+    print("DEBUG:  Progression:  ", progression,  " ;  Temperature Average:  ", __get_owm_forecast_temperature(owm_data), "degree C")    
+    print("DEBUG:  Progression:  ", progression,  " ;  Precipitation Average:  ", __get_owm_forecast_precipitation(owm_data), "liters per square meter")
+    __download_dwd_zipfile()
 
 
