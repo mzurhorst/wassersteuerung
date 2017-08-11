@@ -18,8 +18,8 @@
 debug = True      # debug messages enabled
 
 
-def get_forecast_settings():
-    """ Gets the settings for the forecast
+def get_owm_forecast_settings():
+    """ Gets the settings for the OpenWeatherMap.org forecast
 
     This public function reads the settings for the forecast from the OpenWeatherMap.org data.
     It considers the forecast days and the forecast progression factor.
@@ -60,10 +60,37 @@ def get_forecast_settings():
     return list
 
 
-if debug:
-    temp = get_forecast_settings()
-    print("value:",temp[1], ":", type(temp[1]))
 
+def get_dwd_settings():
+    """ Gets the settings for the Deutscher Wetterdienst recent precipitation
+
+    This public function reads the settings for the recent precipitation from the Deutscher Wetterdienst data.
+    This contains the path to the data on the DWD FTP server.
+
+    Returns:
+        str:  FTP URL to zip file on DWD server
+    """
+
+    import configparser
+
+    config=configparser.ConfigParser()
+    config.read("settings.ini")
+
+    try:
+        dwd_zipfile_url = int(config.get("General", "dwd_zipfile_url"))
+    except ValueError:
+        # hard-code URL for weather station in Baerl, Germany
+        dwd_zipfile_url = 'ftp://ftp-cdc.dwd.de/pub/CDC/observations_germany/climate/daily/more_precip/recent/tageswerte_RR_13670_akt.zip'
+    
+    return dwd_zipfile_url
+
+
+
+if debug:
+    temp = get_owm_forecast_settings()
+    print("value:",temp[1], ":", type(temp[1]))
+    url = get_dwd_settings()
+    print(url)
 
 
 
