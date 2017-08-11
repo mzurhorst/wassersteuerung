@@ -68,29 +68,40 @@ def get_dwd_settings():
     This contains the path to the data on the DWD FTP server.
 
     Returns:
-        str:  FTP URL to zip file on DWD server
+        []:  list of dwd_zipfile_url (str), dwd_zipfile_local (str)
     """
 
     import configparser
+
+    list = []
 
     config=configparser.ConfigParser()
     config.read("settings.ini")
 
     try:
-        dwd_zipfile_url = int(config.get("General", "dwd_zipfile_url"))
+        dwd_zipfile_url = str(config.get("General", "dwd_zipfile_url"))
     except ValueError:
         # hard-code URL for weather station in Baerl, Germany
-        dwd_zipfile_url = 'ftp://ftp-cdc.dwd.de/pub/CDC/observations_germany/climate/daily/more_precip/recent/tageswerte_RR_13670_akt.zip'
+        dwd_zipfile_url = "ftp://ftp-cdc.dwd.de/pub/CDC/observations_germany/climate/daily/more_precip/recent/tageswerte_RR_13670_akt.zip"
+    list.append(dwd_zipfile_url)
     
-    return dwd_zipfile_url
+    try:
+        dwd_zipfile_local = str(config.get("General", "dwd_zipfile_local"))
+    except ValueError:
+        # hard-code local path to zip file from DWD server
+        dwd_zipfile_local = 'E:\Marcus\Documents\Python Projekte\wassersteuerung'
+    list.append(dwd_zipfile_local)    
+    
+    return list
 
 
 
 if debug:
     temp = get_owm_forecast_settings()
     print("value:",temp[1], ":", type(temp[1]))
-    url = get_dwd_settings()
-    print(url)
+    temp2 = get_dwd_settings()
+    print(temp2[0])
+    print(temp2[1])
 
 
 

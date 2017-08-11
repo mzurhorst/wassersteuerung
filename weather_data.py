@@ -92,7 +92,7 @@ def __get_owm_forecast_temperature(json_data=None):
     import settings
 
     # Read 'days' and 'progression' settings from settings.ini file
-    temp = settings.get_forecast_settings()
+    temp = settings.get_owm_forecast_settings()
     days = temp[0]
     progression = temp[1]
 
@@ -146,7 +146,7 @@ def __get_owm_forecast_precipitation(json_data=None):
     import settings
 
     # Read 'days' and 'progression' settings from settings.ini file
-    temp = settings.get_forecast_settings()
+    temp = settings.get_owm_forecast_settings()
     days = temp[0]
     progression = temp[1]
 
@@ -184,44 +184,39 @@ def __get_owm_forecast_precipitation(json_data=None):
 
 
 
+def __get_dwd_recent_precipitation():
+    """ Gets the recent precipitation from Deutscher Wetterdienst data.
+
+    This private function gets the recent precipitation from the Deutscher Wetterdienst data.
+        
+    Returns:
+        str:  recent precipitation
+    """
+
+    import settings
+
+    # Read 'dwd_zipfile_url' setting from settings.ini file
+    dwd_settings = settings.get_dwd_settings()
+    dwd_zipfile_url = dwd_settings[0]
+    print("URL:  ", dwd_settings[0])
+    print("Local Path:  ", dwd_settings[1])
+    
+    import wget
+    
+    fs = wget.download(url=dwd_zipfile_url)
+    
+    print(fs)    
+    
+    return
+
+
+
 if debug:
     progression = 0.8
     import json
     data1 = json.loads(__get_owm_jsonstring(2))      
     print("DEBUG:  Progression:  ", progression,  " ;  Temperature Average:  ", __get_owm_forecast_temperature(data1), "degree C")    
     print("DEBUG:  Progression:  ", progression,  " ;  Precipitation Average:  ", __get_owm_forecast_precipitation(data1), "liters per square meter")
+    __get_dwd_recent_precipitation()
 
 
-
-# commented because this is currently broken
-
-
-# Erwartete Niederschläge auslesen
-#try:
-    #rain_today = data["list"][0]["rain"]
-#except KeyError:
-    #rain_today = 0.0
-
-#try:
-    #rain_tomorrow = data["list"][1]["rain"]
-#except KeyError:
-    #rain_tomorrow = 0.0
-
-#print('Wetter, heute:  ', rain_today, 'l/m², ', temperature_today, '°C')
-#print('Wetter, morgen:  ', rain_tomorrow, 'l/m², ', temperature_tomorrow, '°C')
-
-
-#print("---- Abschnitt 4:  Forecast-Faktor berechnen ----")
-
-
-
-
-
-# commented because I don't want to download the zip file for each test
-# TODO:  wrap this into functions and call from main.py on demand
-
-#import wget
-#dwd_zipfile_url = 'ftp://ftp-cdc.dwd.de/pub/CDC/observations_germany/climate/daily/more_precip/recent/tageswerte_RR_13670_akt.zip'
-#fs = wget.download(url=dwd_zipfile_url)
-#
-#print(fs)
