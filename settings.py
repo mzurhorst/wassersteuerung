@@ -96,12 +96,39 @@ def get_dwd_settings():
 
 
 
+def get_soil_settings():
+    """ Gets the settings for the soil condition
+
+    This public function reads the settings for the soil condition.
+    This contains a factor (range: 0.8 - 1.2) for the water storage capacity of the soil.
+
+    Returns:
+        float:  soil water capacity
+    """
+
+    import configparser
+
+    list = []
+
+    config=configparser.ConfigParser()
+    config.read("settings.ini")
+
+    try:
+        soil_water_capacity = float(config.get("General", "soil_water_capacity"))
+    except ValueError:
+        # hard-code to 1.0 when value not available
+        soil_water_capacity = 1.0
+    
+    return soil_water_capacity
+
+
 if debug:
     temp = get_owm_forecast_settings()
-    print("value:",temp[1], ":", type(temp[1]))
+    print("DEBUG: forecast progression: ",temp[1])
     temp2 = get_dwd_settings()
-    print(temp2[0])
-    print(temp2[1])
+    print("DEBUG: zipfile URL: ", temp2[0])
+    print("DEBUG: local path: ", temp2[1])
+    print("DEBUG: Soil water capacity factor: ", get_soil_settings())
 
 
 
