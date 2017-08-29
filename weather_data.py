@@ -203,10 +203,10 @@ def __download_dwd_zipfile():
     print("URL:  ", dwd_settings[0])
     print("Local Path:  ", dwd_settings[1])
 
-    zipfile = wget.download(url=dwd_zipfile_url)
-    print(zipfile)    
+    zipfiles = wget.download(url=dwd_zipfile_url)
+    print(zipfiles)    
     
-    return zipfile
+    return zipfiles
 
 
 
