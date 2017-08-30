@@ -190,6 +190,45 @@ def __download_dwd_zipfile():
     return zipfiles
 
 
+def __time_of_year():
+    """ Gets the weighting factor for the time of the year.
+
+    This private function returns the general weighting factor for the time of year.
+    Values are fetched from an dictionary.
+        
+    Returns:
+        float:  weighting factor for time of year
+    """
+    
+    # Step 1:  import modules    
+    import datetime
+    
+    # Step 2:  default assignment
+    weighting_factor = 1
+    
+    # define dictionary with weighting factors per months
+    wf_table = {
+    "1"  : "0.0", 
+    "2"  : "0.0", 
+    "3"  : "0.7", 
+    "4"  : "0.9", 
+    "5"  : "1.1",  
+    "6"  : "1.2",  
+    "7"  : "1.2",  
+    "8"  : "1.3",
+    "9"  : "1.2",
+    "10" : "1.0",
+    "11" : "0.0",
+    "12" : "0.0"
+    }
+    
+    # Step 3:  identify current month and read weighting factor from lookup table
+    current_month = datetime.datetime.now().month
+    weighting_factor = float(wf_table.get(str(current_month)))
+
+    return  weighting_factor
+
+
 
 def __get_dwd_recent_precipitation():
     """ Gets the recent precipitation from Deutscher Wetterdienst data.
@@ -246,7 +285,8 @@ def calculate_watering_factor():
     print("OWM Precipitation: ", owm_forecast_precipitation)
     print("OWM Temperature: ", owm_forecast_temperature)
     print("DWD Precipitation: ", dwd_recent_precipitation)
-    
+    print("Time of Year factor: ", __time_of_year())
+
     return
 
 
