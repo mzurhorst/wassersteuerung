@@ -76,7 +76,7 @@ def __get_owm_jsonstring(days):
     return r.text
 
 
-def __get_owm_forecast_temperature(json_data=None):
+def __get_owm_forecast_temperature(json_data, days, progression):
     """ Calculates the forecast temperature from OpenWeatherMap.org data.
 
     This private function calculates the temperature forecast from the OpenWeatherMap.org data.
@@ -89,13 +89,6 @@ def __get_owm_forecast_temperature(json_data=None):
         str:  forecast temperature
     """
 
-    import settings
-
-    # Read 'days' and 'progression' settings from settings.ini file
-    temp = settings.get_owm_forecast_settings()
-    days = temp[0]
-    progression = temp[1]
-
     # confirm that 'progression' is in the allowable range and fix it if required
     # values outside this range do not make sense
     if progression < 0.8:
@@ -103,11 +96,8 @@ def __get_owm_forecast_temperature(json_data=None):
     if progression > 0.92:
         progression = 0.92
 
-    if json_data==None:
-        import json
-        data = json.loads(__get_owm_jsonstring(days))
-    else:
-        data = json_data
+
+    data = json_data
 
     temperature_avg = 0
     remainder = 1 - progression
@@ -130,39 +120,31 @@ def __get_owm_forecast_temperature(json_data=None):
 
 
 
-def __get_owm_forecast_precipitation(json_data=None):
+def __get_owm_forecast_precipitation(json_data, days, progression):
     """ Calculates the forecast precipitation from OpenWeatherMap.org data.
 
     This private function calculates the temperature precipitation from the OpenWeatherMap.org data.
     The result depends on the progression factor and the number of forecast days.
 
     Args:
-        json_data:  json formatted OpenWeatherMap weather forecast (optional)
+        json_data:  json formatted OpenWeatherMap weather forecast
+        days:  number of days 
+        progression:  progression factor 
 
     Returns:
-        str:  forecast precipitation
+        float:  forecast precipitation
     """
 
-    import settings
-
-    # Read 'days' and 'progression' settings from settings.ini file
-    temp = settings.get_owm_forecast_settings()
-    days = temp[0]
-    progression = temp[1]
 
     # confirm that 'progression' is in the allowable range and fix it if required
     # values outside this range do not make sense
     if progression < 0.8:
         progression = 0.8
     if progression > 0.92:
-        progression = 0.92
+        progression = 0.92 
+
+    data = json_data
     
-    if json_data==None:
-        import json
-        data = json.loads(__get_owm_jsonstring(days))
-    else:
-        data = json_data
-        
     precipitation_avg = 0
     remainder = 1 - progression
 
@@ -223,7 +205,60 @@ def __get_dwd_recent_precipitation():
 
 
 
-if debug:
+def calculate_watering_factor():
+    """ Calculates the watering factor.
+
+    This function calculates the individual watering factor for the current watering event.
+    It considers:
+    - recent precipitation from the Deutscher Wetterdienst data
+    - forecast precipitation and temperature from OpenWeatherMap data
+    - time/season of year
+    - watering factor from previous watering event
+    - soil condition
+        
+    Returns:
+        float:  watering factor
+    """
+    
+    # Step 1:  Read required settings from settings.ini
+    import settings
+    
+    # Read 'days' and 'progression' settings from settings.ini file
+    temp = settings.get_owm_forecast_settings()
+    days = temp[0]
+    progression = temp[1]   
+    
+    # Read the soil conditions from settings.ini file
+    soil_water_capacity = settings.get_soil_settings()
+    
+    # Step 2:  Fetch all contributors
+    # OpenWeatherMap.org forecast data
+    import json
+    json_string = json.loads(__get_owm_jsonstring(days))
+    print("Type json_string: ", type(json_string))
+    owm_forecast_precipitation = __get_owm_forecast_precipitation(json_string, days, progression)
+    owm_forecast_temperature = __get_owm_forecast_temperature(json_string, days, progression)
+
+    # Deutscher Wetterdienst recent data
+    dwd_recent_precipitation = __get_dwd_recent_precipitation()
+    
+    # season/time of year
+    
+    print("OWM Precipitation: ", owm_forecast_precipitation)
+    print("OWM Temperature: ", owm_forecast_temperature)
+    print("DWD Precipitation: ", dwd_recent_precipitation)
+    
+    
+    
+    return
+
+
+
+calculate_watering_factor()
+
+
+
+if not debug:
     progression = 0.8
     import json
     owm_data = json.loads(__get_owm_jsonstring(2))      
