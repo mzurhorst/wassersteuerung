@@ -175,16 +175,23 @@ def __download_dwd_zipfile():
         str:  path to zipfile
     """
 
-    import settings, wget
+    import settings, wget, os
     
     # Read 'dwd_zipfile_url' setting from settings.ini file
     dwd_settings = settings.get_dwd_settings()
     dwd_zipfile_url   = dwd_settings[0]
-    dwd_zipfile_local = dwd_settings[1]
-    print("URL:  ", dwd_settings[0])
-    print("Local Path:  ", dwd_settings[1])
-
-    zipfiles = wget.download(url=dwd_zipfile_url)
+    dwd_zippath_local = dwd_settings[1]
+    print("DEBUG:   URL:  ", dwd_settings[0])
+    print("DEBUG:   Local Path:  ", dwd_settings[1])
+    
+    if not os.path.exists(dwd_zippath_local):
+        os.makedirs(dwd_zippath_local)
+    
+    filename = "test.zip"
+    dwd_zipfile_local = dwd_zippath_local + filename
+    print("DEBUG:   Local File:  ", dwd_zipfile_local)
+    
+    zipfiles = wget.download(url=dwd_zipfile_url, out=dwd_zipfile_local)
     print(zipfiles)    
     
     return zipfiles
@@ -295,5 +302,6 @@ def calculate_watering_factor():
 
 if debug:
     calculate_watering_factor()
+    __download_dwd_zipfile()
 
 
