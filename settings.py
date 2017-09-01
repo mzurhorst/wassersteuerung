@@ -65,7 +65,7 @@ def get_dwd_settings():
     """ Gets the settings for the Deutscher Wetterdienst recent precipitation
 
     This public function reads the settings for the recent precipitation from the Deutscher Wetterdienst data.
-    This contains the path to the data on the DWD FTP server.
+    This contains the path to the data on the DWD FTP server and the local path of the zip file.
 
     Returns:
         []:  list of dwd_zipfile_url (str), dwd_zipfile_local (str)
