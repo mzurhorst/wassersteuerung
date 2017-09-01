@@ -65,10 +65,13 @@ def get_dwd_settings():
     """ Gets the settings for the Deutscher Wetterdienst recent precipitation
 
     This public function reads the settings for the recent precipitation from the Deutscher Wetterdienst data.
-    This contains the path to the data on the DWD FTP server and the local path of the zip file.
+    This contains:
+    - path to the data on the DWD FTP server
+    - local path of the zip file
+    - local path of the extracted text file with precipitation data
 
     Returns:
-        []:  list of dwd_zipfile_url (str), dwd_zipfile_local (str)
+        []:  list of dwd_zipfile_url (str), dwd_zipfile_local (str), dwd_datafile (str)
     """
 
     import configparser
@@ -89,9 +92,16 @@ def get_dwd_settings():
         dwd_zipfile_local = str(config.get("General", "dwd_zipfile_local"))
     except ValueError:
         # hard-code local path to zip file from DWD server
-        dwd_zipfile_local = 'E:\Marcus\Documents\Python Projekte\wassersteuerung'
-    list.append(dwd_zipfile_local)    
+        dwd_zipfile_local = 'E:\Marcus\Documents\Python Projekte\wassersteuerung\download\tageswerte_RR_13670_akt.zip'
+    list.append(dwd_zipfile_local)
     
+    try:
+        dwd_datafile = str(config.get("General", "dwd_datafile"))
+    except ValueError:
+        # hard-code local path to the extracted data file
+        dwd_datafile = 'E:\Marcus\Documents\Python Projekte\wassersteuerung\download\dwd_data.txt'
+    list.append(dwd_datafile)    
+        
     return list
 
 
