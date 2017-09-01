@@ -273,7 +273,7 @@ def calculate_watering_factor():
     # Step 3:  Fetch all contributors
     # OpenWeatherMap.org forecast data
     json_string = json.loads(__get_owm_jsonstring(days))
-    print("Type json_string: ", type(json_string))
+    print("DEBUG:   Type json_string: ", type(json_string))
     owm_forecast_precipitation = __get_owm_forecast_precipitation(json_string, days, progression)
     owm_forecast_temperature = __get_owm_forecast_temperature(json_string, days, progression)
 
@@ -281,11 +281,13 @@ def calculate_watering_factor():
     dwd_recent_precipitation = __get_dwd_recent_precipitation()
     
     # season/time of year
+    print("DEBUG:   Time of Year factor: ", __time_of_year())
     
-    print("OWM Precipitation: ", owm_forecast_precipitation)
-    print("OWM Temperature: ", owm_forecast_temperature)
-    print("DWD Precipitation: ", dwd_recent_precipitation)
-    print("Time of Year factor: ", __time_of_year())
+    # other items
+    print("DEBUG:   OWM Precipitation: ", owm_forecast_precipitation)
+    print("DEBUG:   OWM Temperature: ", owm_forecast_temperature)
+    print("DEBUG:   DWD Precipitation: ", dwd_recent_precipitation)
+
 
     return
 
