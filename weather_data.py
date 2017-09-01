@@ -165,36 +165,43 @@ def __get_owm_forecast_precipitation(json_data, days, progression):
 
 
 
-def __download_dwd_zipfile():
-    """ Downloads the zipfile from Deutscher Wetterdienst FTP server.
+def __download_and_extract_dwd_zipfile():
+    """ Downloads the zipfile from Deutscher Wetterdienst FTP server and extract it to local path.
 
     This private function downloads the zipfile with recent precipitation data from 
-    the Deutscher Wetterdienst FTP server.
+    the Deutscher Wetterdienst FTP server and extracts the relevant .txt file with data to the local folder.
         
     Returns:
-        str:  path to zipfile
+        str:  path to local txt file
     """
 
-    import settings, wget, os
+    import settings, wget, os, zipfile
     
     # Read 'dwd_zipfile_url' setting from settings.ini file
     dwd_settings = settings.get_dwd_settings()
     dwd_zipfile_url   = dwd_settings[0]
-    dwd_zippath_local = dwd_settings[1]
-    print("DEBUG:   URL:  ", dwd_settings[0])
-    print("DEBUG:   Local Path:  ", dwd_settings[1])
+    dwd_zipfile_local = dwd_settings[1]
+    dwd_datafile = dwd_settings[2]
+    print("DEBUG:   URL:  ", dwd_zipfile_url)
+    print("DEBUG:   Local Zip File:  ", dwd_zipfile_local)
+    print("DEBUG:   Local Data File:  ", dwd_datafile)
     
-    if not os.path.exists(dwd_zippath_local):
-        os.makedirs(dwd_zippath_local)
-    
-    filename = "test.zip"
-    dwd_zipfile_local = dwd_zippath_local + filename
-    print("DEBUG:   Local File:  ", dwd_zipfile_local)
-    
+    zip_path = os.path.dirname(dwd_zipfile_local)
+    if os.path.exists(dwd_zipfile_local):
+        os.remove(dwd_zipfile_local)
+    else:
+        
+        if not os.path.exists(zip_path):
+            os.makedirs(zip_path)
+   
     zipfiles = wget.download(url=dwd_zipfile_url, out=dwd_zipfile_local)
     print(zipfiles)    
-    
+        
+    with zipfile.ZipFile(zipfiles) as zf:
+        zf.extractall(zip_path)
+       
     return zipfiles
+
 
 
 def __time_of_year():
@@ -302,6 +309,6 @@ def calculate_watering_factor():
 
 if debug:
     calculate_watering_factor()
-    __download_dwd_zipfile()
+    __download_and_extract_dwd_zipfile()
 
 
