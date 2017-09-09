@@ -9,9 +9,6 @@
 #Description    :  This module provides functions to read/write settings
 #                  for the different water circuits from/to an INI file.
 
-# TODO:   Add generic options based on particular soil conditions.
-#         E.g., consider more days when soil keeps humidity.
-
 
 # Define whether or not debug messages shall be printed
 # debug = False     # debug messages surpressed
@@ -49,7 +46,7 @@ def get_owm_forecast_settings():
 
     # initialize variable with default value.
     forecast_progression = 0
-    
+
     try:
         forecast_progression = float(config.get("General", "forecast_progression"))
     except:
@@ -87,21 +84,21 @@ def get_dwd_settings():
         # hard-code URL for weather station in Baerl, Germany
         dwd_zipfile_url = "ftp://ftp-cdc.dwd.de/pub/CDC/observations_germany/climate/daily/more_precip/recent/tageswerte_RR_13670_akt.zip"
     list.append(dwd_zipfile_url)
-    
+
     try:
         dwd_zipfile_local = str(config.get("General", "dwd_zipfile_local"))
     except ValueError:
         # hard-code local path to zip file from DWD server
         dwd_zipfile_local = 'E:\Marcus\Documents\Python Projekte\wassersteuerung\download\tageswerte_RR_13670_akt.zip'
     list.append(dwd_zipfile_local)
-    
+
     try:
         dwd_datafile = str(config.get("General", "dwd_datafile"))
     except ValueError:
         # hard-code local path to the extracted data file
         dwd_datafile = 'E:\Marcus\Documents\Python Projekte\wassersteuerung\download\dwd_data.txt'
-    list.append(dwd_datafile)    
-        
+    list.append(dwd_datafile)
+
     return list
 
 
@@ -128,7 +125,7 @@ def get_soil_settings():
     except ValueError:
         # hard-code to 1.0 when value not available
         soil_water_capacity = 1.0
-    
+
     return soil_water_capacity
 
 
