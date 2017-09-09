@@ -175,32 +175,35 @@ def __download_and_extract_dwd_zipfile():
         str:  path to local txt file
     """
 
-    import settings, wget, os, zipfile
+    import settings, wget, os, zipfile, shutil, fnmatch
     
     # Read 'dwd_zipfile_url' setting from settings.ini file
     dwd_settings = settings.get_dwd_settings()
     dwd_zipfile_url   = dwd_settings[0]
     dwd_zipfile_local = dwd_settings[1]
     dwd_datafile = dwd_settings[2]
-    print("DEBUG:   URL:  ", dwd_zipfile_url)
-    print("DEBUG:   Local Zip File:  ", dwd_zipfile_local)
-    print("DEBUG:   Local Data File:  ", dwd_datafile)
+    # print("DEBUG:   URL:  ", dwd_zipfile_url)
+    # print("DEBUG:   Local Zip File:  ", dwd_zipfile_local)
+    # print("DEBUG:   Local Data File:  ", dwd_datafile)
     
+    # remove the working directory entirely
     zip_path = os.path.dirname(dwd_zipfile_local)
-    if os.path.exists(dwd_zipfile_local):
-        os.remove(dwd_zipfile_local)
-    else:
-        
-        if not os.path.exists(zip_path):
-            os.makedirs(zip_path)
-   
+    shutil.rmtree(zip_path)       
+     
+    if not os.path.exists(zip_path):
+        os.makedirs(zip_path)
+    
     zipfiles = wget.download(url=dwd_zipfile_url, out=dwd_zipfile_local)
-    print(zipfiles)    
-        
+            
     with zipfile.ZipFile(zipfiles) as zf:
-        zf.extractall(zip_path)
-       
-    return zipfiles
+        for archivefile in zf.namelist():
+            if fnmatch.fnmatch(archivefile, 'produkt_*.txt'):
+                datafile = zf.open(archivefile)        
+                zf.extract(archivefile, zip_path)
+                # rename to a constant file name
+                os.rename(os.path.join(zip_path, archivefile), dwd_datafile)
+    
+    return dwd_datafile
 
 
 

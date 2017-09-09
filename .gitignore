@@ -9,6 +9,8 @@ my_credentials.py
 tageswerte_*/
 other*/
 Projektinformationen/
+download/
+*dwd*.txt
 
 # Eric IDE
 .eric6project/
