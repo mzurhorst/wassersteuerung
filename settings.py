@@ -99,6 +99,13 @@ def get_dwd_settings():
         dwd_datafile = 'E:\Marcus\Documents\Python Projekte\wassersteuerung\download\dwd_data.txt'
     list.append(dwd_datafile)
 
+    try:
+        dwd_recent_days = int(config.get("General", "dwd_recent_days"))
+    except ValueError:
+        # 2 days is a reasonable default setting.
+        dwd_recent_days = 2
+    list.append(dwd_recent_days)
+
     return list
 
 
