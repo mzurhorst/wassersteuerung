@@ -304,14 +304,43 @@ def calculate_watering_factor():
     print("DEBUG:   OWM Precipitation: ", owm_forecast_precipitation)
     print("DEBUG:   OWM Temperature: ", owm_forecast_temperature)
     print("DEBUG:   DWD Precipitation: ", dwd_recent_precipitation)
-
-
+    
     return
-
 
 
 if debug:
     calculate_watering_factor()
-    __download_and_extract_dwd_zipfile()
+    #__download_and_extract_dwd_zipfile()
 
+
+    
+
+print(' --------- Datei verarbeiten ---------')
+
+import csv
+import datetime
+
+current_month = datetime.datetime.now().month
+if current_month < 10:
+    current_month = '0' + str(current_month)
+else:
+    current_month = str(current_month)
+    
+current_year = str(datetime.datetime.now().year)
+yesterday = str(datetime.datetime.now().day)
+                
+string1 = current_year + current_month + yesterday
+string1 = '20170908'
+
+print('DEBUG:  string1: ', string1)
+print('DEBUG:  type(string1): ', type(string1))
+
+with open('download/dwd_data.txt') as csvfile:
+    reader = csv.DictReader(csvfile, delimiter=';')
+    for row in reader:
+        #print(row['MESS_DATUM'])
+        #print("DEBUG:  type(row['MESS_DATUM'])", type(row['MESS_DATUM']))
+        if (string1 == row['MESS_DATUM']):
+            print('DEBUG:  ', row['MESS_DATUM'], row['  RS'])
+        #print(row)
 
