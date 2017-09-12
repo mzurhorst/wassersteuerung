@@ -165,35 +165,32 @@ def __get_owm_forecast_precipitation(json_data, days, progression):
 
 
 
-def __download_and_extract_dwd_zipfile():
+def __download_and_extract_dwd_zipfile(zipfile_url, zipfile_local, dwd_datafile):
     """ Downloads the zipfile from Deutscher Wetterdienst FTP server and extract it to local path.
 
     This private function downloads the zipfile with recent precipitation data from 
     the Deutscher Wetterdienst FTP server and extracts the relevant .txt file with data to the local folder.
+    
+    Args:
+        zipfile_url:  URL to zipfile on DWD server
+        zipfile_local:  local path to downloaded zipfile 
+        dwd_datafile:  local path to extracted datafile
         
     Returns:
         str:  path to local txt file
     """
 
-    import settings, wget, os, zipfile, shutil, fnmatch
-    
-    # Read 'dwd_zipfile_url' setting from settings.ini file
-    dwd_settings = settings.get_dwd_settings()
-    dwd_zipfile_url   = dwd_settings[0]
-    dwd_zipfile_local = dwd_settings[1]
-    dwd_datafile = dwd_settings[2]
-    # print("DEBUG:   URL:  ", dwd_zipfile_url)
-    # print("DEBUG:   Local Zip File:  ", dwd_zipfile_local)
-    # print("DEBUG:   Local Data File:  ", dwd_datafile)
-    
+    import wget, os, zipfile, shutil, fnmatch
+ 
     # remove the working directory entirely
-    zip_path = os.path.dirname(dwd_zipfile_local)
-    shutil.rmtree(zip_path)       
+    zip_path = os.path.dirname(zipfile_local)
+    if os.path.exists(zip_path):
+        shutil.rmtree(zip_path)       
      
     if not os.path.exists(zip_path):
         os.makedirs(zip_path)
     
-    zipfiles = wget.download(url=dwd_zipfile_url, out=dwd_zipfile_local)
+    zipfiles = wget.download(url=zipfile_url, out=zipfile_local)
             
     with zipfile.ZipFile(zipfiles) as zf:
         for archivefile in zf.namelist():
@@ -203,7 +200,7 @@ def __download_and_extract_dwd_zipfile():
                 # rename to a constant file name
                 os.rename(os.path.join(zip_path, archivefile), dwd_datafile)
     
-    return dwd_datafile
+    return
 
 
 
@@ -250,12 +247,25 @@ def __time_of_year():
 def __get_dwd_recent_precipitation():
     """ Gets the recent precipitation from Deutscher Wetterdienst data.
 
-    This private function gets the recent precipitation from the Deutscher Wetterdienst data.
+    This private function reads the settings for the Deutscher Wetterdienst data from settings.ini.
+    Afterwards, the zipfile is fetched and the datafile is extracted.  Finally, the recent precipitation is read from the datafile.
         
     Returns:
         str:  recent precipitation
     """
     
+    import settings, csv
+    
+    # Fetch DWD settings from settings.ini file
+    # and assign to local variables
+    dwd_settings = settings.get_dwd_settings()
+    dwd_zipfile_url   = dwd_settings[0]
+    dwd_zipfile_local = dwd_settings[1]
+    dwd_datafile = dwd_settings[2]
+    dwd_recent_days = dwd_settings[3]  
+    
+    __download_and_extract_dwd_zipfile(dwd_zipfile_url, dwd_zipfile_local, dwd_datafile)
+
     return
 
 
@@ -310,37 +320,25 @@ def calculate_watering_factor():
 
 if debug:
     calculate_watering_factor()
-    #__download_and_extract_dwd_zipfile()
-
 
     
 
-print(' --------- Datei verarbeiten ---------')
+#print(' --------- Datei verarbeiten ---------')
+
+from datetime import date, timedelta
+two_days_ago = date.today() - timedelta(3)
+print ("DEBUG:  Datum von vorgestern: ", two_days_ago.strftime('%Y%m%d'))
+two_days_ago_string = two_days_ago.strftime('%Y%m%d')
 
 import csv
-import datetime
-
-current_month = datetime.datetime.now().month
-if current_month < 10:
-    current_month = '0' + str(current_month)
-else:
-    current_month = str(current_month)
-    
-current_year = str(datetime.datetime.now().year)
-yesterday = str(datetime.datetime.now().day)
                 
-string1 = current_year + current_month + yesterday
-string1 = '20170908'
-
-print('DEBUG:  string1: ', string1)
-print('DEBUG:  type(string1): ', type(string1))
-
 with open('download/dwd_data.txt') as csvfile:
     reader = csv.DictReader(csvfile, delimiter=';')
     for row in reader:
         #print(row['MESS_DATUM'])
         #print("DEBUG:  type(row['MESS_DATUM'])", type(row['MESS_DATUM']))
-        if (string1 == row['MESS_DATUM']):
+        if (two_days_ago_string == row['MESS_DATUM']):
             print('DEBUG:  ', row['MESS_DATUM'], row['  RS'])
         #print(row)
+
 
