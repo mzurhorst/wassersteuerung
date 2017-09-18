@@ -11,9 +11,16 @@ from kivy.app import App
 class GartenbewaesserungApp(App):
     def  testfunktion(self,  *args):
        print ("Testausgabe") 
-       exit(0)
+       if args[1]:
+           self.Status1 = "Device On"
+           print("Turning On")
+       else:
+           self.Status1 = "Device Off"
+           print("Turning Off")       
+       # exit(0)
 
 
 if __name__ == '__main__':
+    
     GartenbewaesserungApp().run()
 
