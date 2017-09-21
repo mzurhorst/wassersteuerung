@@ -136,6 +136,60 @@ def get_soil_settings():
     return soil_water_capacity
 
 
+
+def get_valve_settings(valve_name):
+    """ Gets the settings for the valve
+
+    This public function reads the settings for a valve.
+    This contains the name, description, status, basictime and watergroup of the valve.
+    
+    Args:
+        str:  valve name
+
+    Returns:
+        []:  list of name (str), description (str), status (bool), basictime (int), watergroup (int)
+    """
+
+    import configparser
+
+    list = []
+
+    config=configparser.ConfigParser()
+    config.read("settings.ini")
+
+    try:
+        name = config.get(valve_name, "name")
+    except ValueError:
+        name = "Ventil xyz"
+    list.append(name)
+
+    try:
+        description = config.get(valve_name, "description")
+    except ValueError:
+        description = "Beschreibung xyz"
+    list.append(description)
+
+    try:
+        status = bool(config.get(valve_name, "isactive"))
+    except ValueError:
+        status = False
+    list.append(status)
+    
+    try:
+        basictime = int(config.get(valve_name, "basictime"))
+    except ValueError:
+        basictime = 1
+    list.append(basictime)
+        
+    try:
+        watergroup = int(config.get(valve_name, "watergroup"))
+    except ValueError:
+        watergroup = 1
+    list.append(watergroup)
+
+    return list
+
+
 if debug:
     temp = get_owm_forecast_settings()
     print("DEBUG: forecast progression: ",temp[1])
@@ -143,7 +197,7 @@ if debug:
     print("DEBUG: zipfile URL: ", temp2[0])
     print("DEBUG: local path: ", temp2[1])
     print("DEBUG: Soil water capacity factor: ", get_soil_settings())
-
+    print("DEBUG: Valve settings: ", get_valve_settings("Valve1"))
 
 
 #print("Beschreibung für Ventil 1 (vor Update): ", config.get("Valve1", "description"))
