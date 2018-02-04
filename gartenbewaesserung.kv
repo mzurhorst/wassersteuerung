@@ -1,26 +1,26 @@
 #:import Factory kivy.factory.Factory
 
-<MyPopup2@Popup>:
-    auto_dismiss: False
-    title: "Popup Window No. 2"
-    TabbedPanel:
-        do_default_tab: False
-        TabbedPanelItem:
-            text: 'first tab'
-            Label:
-                text: 'First tab content area'
-        TabbedPanelItem:
-            text: 'tab2'
-            BoxLayout:
-                Label:
-                    text: 'Second tab content area'
-                Button:
-                    text: 'Button that does nothing'
-        TabbedPanelItem:
-            text: 'tab3'
-            Button:
-                text: 'Close me, too!'
-                on_release: root.dismiss()
+#<MyPopup2@Popup>:
+    #auto_dismiss: False
+    #title: "Popup Window No. 2"
+    #TabbedPanel:
+        #do_default_tab: False
+        #TabbedPanelItem:
+            #text: 'first tab'
+            #Label:
+                #text: 'First tab content area'
+        #TabbedPanelItem:
+            #text: 'tab2'
+            #BoxLayout:
+                #Label:
+                    #text: 'Second tab content area'
+                #Button:
+                    #text: 'Button that does nothing'
+        #TabbedPanelItem:
+            #text: 'tab3'
+            #Button:
+                #text: 'Close me, too!'
+                #on_release: root.dismiss()
 
 
 <MyPopup1@Popup>:
@@ -39,12 +39,15 @@
                         Label:
                             text: 'Circuit Active:'
                             halign: "left"
-                        Switch:
-                            id: "switch1"
+                        ToggleButton:
+                            id: popupbutton
+                            on_state: app.testfunktion(*args)
+                            
                     BoxLayout:
                         Label:
                             text: 'Default Watering Time: [min]'
-                        TextInput:    
+                        TextInput:
+                            id: popuptextinput
                             text: '30'
                     BoxLayout:
                         Label:
@@ -62,7 +65,7 @@
                         Button:
                             text: 'Next'
                             on_release: root.dismiss()
-                            on_release: Factory.MyPopup2().open()
+                            #on_release: Factory.MyPopup2().open()
 
 
 
@@ -80,10 +83,12 @@ BoxLayout:
         BoxLayout:
             padding: 5
             ToggleButton:
+                state: button3.state
                 text: "Wasserkreis 2"
         BoxLayout:
             padding: 5
             ToggleButton:
+                id: button3
                 text: "Wasserkreis 3"
 
     BoxLayout:
@@ -99,6 +104,7 @@ BoxLayout:
             padding: 5
             ToggleButton:
                 text: "Wasserkreis 6"
+                on_state: app.testfunktion(*args)
 
     BoxLayout:
         BoxLayout:
@@ -111,9 +117,7 @@ BoxLayout:
             BoxLayout:
                 Button:
                     padding_right: 5
-                    #background_normal: 'icons/icon_settings.png'
                     text: "Settings"
-                    #markup: True
                     on_release: Factory.MyPopup1().open()
                 ToggleButton:
                     id: mytogglebutton
