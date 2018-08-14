@@ -8,11 +8,43 @@
 #
 #Description    :  This module provides functions to read/write settings
 #                  for the different water circuits from/to an INI file.
+#                  It also provides a class MySettings to keep all settings in
+#                  memory.
 
 
 # Define whether or not debug messages shall be printed
 # debug = False     # debug messages surpressed
 debug = True      # debug messages enabled
+
+
+import configparser
+
+class MySettings:
+    AllSettings = []
+
+    def __init__(self, name):
+        self.name = name
+        MySettings.AllSettings.append(self)
+
+
+def load_config():
+    config = configparser.ConfigParser()
+    config.read('settings.ini')
+    for section in config.sections():
+        if section.startswith('Valve'):
+            MySettings(config[section]['name'])
+
+def main():
+    load_config()
+    print(f"Created {len(MySettings.AllSettings)} 'MySettings' instances")
+    for settings in MySettings.AllSettings:
+        print(settings.name)
+
+
+
+main()
+
+
 
 
 def get_owm_forecast_settings():
