@@ -4,7 +4,7 @@
 #Author         :  Marcus Zurhorst
 #Email          :  marcuszurhorst@gmail.com
 #License        :  MIT License
-#Copyright      :  (c) 2017 Marcus Zurhorst
+#Copyright      :  (c) 2017-2018 Marcus Zurhorst
 #
 #Description    :  This module provides functions to read/write settings
 #                  for the different water circuits from/to an INI file.
