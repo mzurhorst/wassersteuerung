@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<head>
+	<title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="./static/css/design.css">
+	<link rel="stylesheet" type="text/css" href="./static/css/bootstrap.min.css">
+    <script type="text/javascript" src="./static/js/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="./static/js/bootstrap.min.js"></script>
+    <script src="./static/js/rangeslider.min.js"></script>
+
+
+
+
+	<script>
+    jQuery(document).ready(function(){
+    jQuery(".nav-tabs a").click(function(){
+        jQuery(this).tab('show');
+    });
+    jQuery(".heading.active").hide();
+    jQuery(".chactive").click(function(){
+        jQuery(".heading").toggle();
+
+
+    });
+    var minutesLabel = document.getElementsByClassName("minutes");
+    var secondsLabel = document.getElementsByClassName("seconds");
+    var totalSeconds = 0;
+    setInterval(setTime, 1000);
+
+    function setTime() {
+    ++totalSeconds;
+    var i;
+     for (i = 0; i < secondsLabel.length; i++) {
+    secondsLabel[i].innerHTML = pad(totalSeconds % 60);
+     minutesLabel[i].innerHTML = pad(parseInt(totalSeconds / 60));
+}
+    }
+
+    function pad(val) {
+
+    var valString = val + "";
+    if (valString.length < 2) {
+    return "0" + valString;
+    } else {
+    return valString;
+    }
+    }
+
+    jQuery(".timer").hide();
+    jQuery(".tab").click(function(){
+    jQuery(this).hide();
+    jQuery(this).next(".tab2").show();
+    jQuery(this).parent().prev().find(".timer").toggle();
+    jQuery(this).parent().prev().find(".description").toggle();
+    });
+    jQuery(".tab2").click(function(){
+    jQuery(this).hide();
+    jQuery(this).prev(".tab1").show();
+});
+   var rangeSlider = function(){
+  var slider = jQuery('.range-slider'),
+      range = jQuery('.range-slider__range'),
+      value = jQuery('.range-slider__value');
+
+  slider.each(function(){
+
+    value.each(function(){
+      var value = jQuery(this).prev().attr('value');
+      jQuery(this).html(value);
+    });
+
+    range.on('input', function(){
+      jQuery(this).next(value).html(this.value);
+    });
+  });
+};
+
+rangeSlider();
+
+    });
+
+</script>
+</head>
+<body style="height:100vh;">
+
+	<div class="row" id="top">
+		<div class="container1">
+			<div class="col-md-12 col-xs-12">
+			<div class="col-md-8 col-8">
+				<h1 class="heading">Gartenbew&auml;sserung</h1>
+                <h1 class="heading active">Gartenbew&auml;sserung (aktiv)</h1>
+			</div>
+			<div class="col-md-4 col-4">
+				<label class="switch" id="last">
+                <input type="checkbox" checked class="chactive">
+                <span class="slider round"></span>
+                </label>
+			</div>
+			</div>
+		</div>
+    </div>
+    <div class="row" id="bottom">
+		<div class="container1">
+			<ul class="nav nav-tabs">
+    <li class="nav-item col-md-6">
+      <a data-toggle="tab" class="nav-link active" href="#home">Betrieb</a>
+    </li>
+    <li class="nav-item col-md-6">
+      <a  data-toggle="tab" class="nav-link" href="#menu1">Einstellungen</a>
+    </li>
+  </ul>
+
+		</div>
+    </div>
+
+
+    <div class="tab-content">
+    <div id="home" class="container tab-pane active col-md-12">
+    	<div class="container1">
+    	<div class="col-md-12 space2">
+                <div class="col-md-4 col-6" class="border">
+	    			<h1 class="ventil">Ventil 1</h1>
+	    			<p class="description">Small
+                    Description text<br>
+                    of Water circuit</p>
+
+
+                    <p class="timer"><label class="minutes">00</label>:<label class="seconds">00</label> <span class="timer-text">min</span></p>
+
+	    		</div>
+	    		<div class="col-md-8 col-6">
+	    			<button class="tab tab1">Ventil &ouml;ffnen</button>
+                    <button class="tab tab2" style="display: none; box-shadow: 2px 2px #000;">Ventil schlie&szlig;en</button>
+	    		</div>
+        </div>
+    <div class="col-md-12 space2">
+                <div class="col-md-4 col-6" class="border">
+	    			<h1 class="ventil">Ventil 2</h1>
+	    			<p class="description">Small
+                    Description text<br>
+                    of Water circuit</p>
+
+                    <p class="timer"><label class="minutes">00</label>:<label class="seconds">00</label><span class="timer-text">min</span></p>
+	    		</div>
+	    		<div class="col-md-8 col-6">
+	    			<button class="tab tab1">Ventil &ouml;ffnen</button>
+                    <button class="tab tab2" style="display: none; box-shadow: 2px 2px #000;">Ventil schlie&szlig;en</button>
+	    		</div>
+    </div>
+    <div class="col-md-12 space2">
+                <div class="col-md-4 col-6" class="border">
+	    			<h1 class="ventil">Ventil 3</h1>
+	    			<p class="description">Small
+                    Description text<br>
+                    of Water circuit</p>
+                    <!--  <br> -->
+                    <p class="timer"><label class="minutes">00</label>:<label class="seconds">00</label><span class="timer-text">min</span></p>
+	    		</div>
+	    		<div class="col-md-8 col-6">
+	    			<button class="tab tab1">Ventil &ouml;ffnen</button>
+                     <button class="tab tab2" style="display: none; box-shadow: 2px 2px #000;">Ventil schlie&szlig;en</button>
+	    		</div>
+    </div>
+    <div class="col-md-12 space2">
+                <div class="col-md-4 col-6" class="border">
+	    			<h1 class="ventil">Ventil 4</h1>
+	    			<p class="description">Small
+                    Description text<br>
+                    of Water circuit</p>
+                    <!--  <br> -->
+                    <p class="timer"><label class="minutes">00</label>:<label class="seconds">00</label><span class="timer-text">min</span></p>
+	    		</div>
+	    		<div class="col-md-8 col-6">
+	    			<button class="tab tab1">Ventil &ouml;ffnen</button>
+                    <button class="tab tab2" style="display: none; box-shadow: 2px 2px #000;">Ventil schlie&szlig;en</button>
+	    		</div>
+    </div>
+    <div class="col-md-12 space2">
+                <div class="col-md-4 col-6" class="border">
+	    			<h1 class="ventil">Ventil 5</h1>
+	    			<p class="description">Small
+                    Description text<br>
+                    of Water circuit</p>
+
+                    <p class="timer"><label class="minutes">00</label>:<label class="seconds">00</label><span class="timer-text">min</span></p>
+	    		</div>
+	    		<div class="col-md-8 col-6">
+	    			<button class="tab tab1">Ventil &ouml;ffnen</button>
+                    <button class="tab tab2" style="display: none; box-shadow: 2px 2px #000;">Ventil schlie&szlig;en</button>
+	    		</div>
+    </div>
+    <div class="col-md-12 space2">
+                <div class="col-md-4 col-6" class="border">
+	    			<h1 class="ventil">Ventil 6</h1>
+	    			<p class="description">Small
+                    Description text<br>
+                    of Water circuit</p>
+
+                    <p class="timer"><label class="minutes">00</label>:<label class="seconds">00</label><span class="timer-text">min</span></p>
+	    		</div>
+	    		<div class="col-md-8 col-6">
+	    			<button class="tab tab1">Ventil &ouml;ffnen</button>
+                    <button class="tab tab2" style="display: none; box-shadow: 2px 2px #000;">Ventil schlie&szlig;en</button>
+	    		</div>
+    </div>
+</div>
+</div>
+    <div id="menu1" class="container tab-pane fade col-md-12">
+      <div class="col-md-12 space">
+	    		<div class="col-md-3 col-3" id="border">
+	    			<h1 class="ventil">Ventil 1</h1>
+
+	    			<p class="description">Small
+                    Description text
+                    of Water circuit</p>
+	    		</div>
+	    		<div class="col-md-3 col-2" id="border1">
+	    			<p class="auto">Automatik</p>
+	    			<br>
+	    			<div class="col-md-4">
+				    <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider round"></span>
+                    </label>
+			        </div>
+			    </div>
+	    		<div class="col-md-6 col-7 range">
+	    			<p>Dauer[min]</p>
+                    <div class="range-slider">
+                      0 <input class="range-slider__range" type="range" value="0" min="0" max="60"> 60
+                      <span class="range-slider__value">0</span>
+                    </div>
+                    <p>Frequenz</p>
+                    <div class="row">
+                    	<div class="col-md-5 col-5"><label class="container2">Jeden Tag
+                               <input type="radio" checked="checked" name="radio">
+                               <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-md-7 col-6" style="padding: 0px !important;"><label class="container2">Jeden zweiten Tag
+                                <input type="radio" name="radio">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+
+
+	    		</div>
+	    </div>
+	    <div class="col-md-12 space">
+                <div class="col-md-3 col-3" id="border">
+                    <h1 class="ventil">Ventil 2</h1>
+
+                    <p class="description">Small
+                    Description text
+                    of Water circuit</p>
+                </div>
+                <div class="col-md-3 col-2" id="border1">
+                    <p class="auto">Automatik</p>
+                    <br>
+                    <div class="col-md-4">
+                    <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider round"></span>
+                    </label>
+                    </div>
+                </div>
+                <div class="col-md-6 col-7 range">
+                    <p>Dauer[min]</p>
+                    <div class="range-slider">
+                      0 <input class="range-slider__range" type="range" value="0" min="0" max="60"> 60
+                      <span class="range-slider__value">0</span>
+                    </div>
+                    <p>Frequenz</p>
+                    <div class="row">
+                        <div class="col-md-5 col-5"><label class="container2">Jeden Tag
+                               <input type="radio" checked="checked" name="radio">
+                               <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-md-7 col-6" style="padding: 0px !important;"><label class="container2">Jeden zweiten Tag
+                                <input type="radio" name="radio">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+
+
+                </div>
+        </div>
+	    <div class="col-md-12 space">
+                <div class="col-md-3 col-3" id="border">
+                    <h1 class="ventil">Ventil 3</h1>
+
+                    <p class="description">Small
+                    Description text
+                    of Water circuit</p>
+                </div>
+                <div class="col-md-3 col-2" id="border1">
+                    <p class="auto">Automatik</p>
+                    <br>
+                    <div class="col-md-4">
+                    <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider round"></span>
+                    </label>
+                    </div>
+                </div>
+                <div class="col-md-6 col-7 range">
+                    <p>Dauer[min]</p>
+                    <div class="range-slider">
+                      0 <input class="range-slider__range" type="range" value="0" min="0" max="60"> 60
+                      <span class="range-slider__value">0</span>
+                    </div>
+                    <p>Frequenz</p>
+                    <div class="row">
+                        <div class="col-md-5 col-5"><label class="container2">Jeden Tag
+                               <input type="radio" checked="checked" name="radio">
+                               <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-md-7 col-6" style="padding: 0px !important;"><label class="container2">Jeden zweiten Tag
+                                <input type="radio" name="radio">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+
+
+                </div>
+        </div>
+
+        <div class="col-md-12 space">
+                <div class="col-md-3 col-3" id="border">
+                    <h1 class="ventil">Ventil 4</h1>
+
+                    <p class="description">Small
+                    Description text
+                    of Water circuit</p>
+                </div>
+                <div class="col-md-3 col-2" id="border1">
+                    <p class="auto">Automatik</p>
+                    <br>
+                    <div class="col-md-4">
+                    <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider round"></span>
+                    </label>
+                    </div>
+                </div>
+                <div class="col-md-6 col-7 range">
+                    <p>Dauer[min]</p>
+                    <div class="range-slider">
+                      0 <input class="range-slider__range" type="range" value="0" min="0" max="60"> 60
+                      <span class="range-slider__value">0</span>
+                    </div>
+                    <p>Frequenz</p>
+                    <div class="row">
+                        <div class="col-md-5 col-5"><label class="container2">Jeden Tag
+                               <input type="radio" checked="checked" name="radio">
+                               <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-md-7 col-6" style="padding: 0px !important;"><label class="container2">Jeden zweiten Tag
+                                <input type="radio" name="radio">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+
+
+                </div>
+        </div>
+	    <div class="col-md-12 space">
+                <div class="col-md-3 col-3" id="border">
+                    <h1 class="ventil">Ventil 5</h1>
+
+                    <p class="description">Small
+                    Description text
+                    of Water circuit</p>
+                </div>
+                <div class="col-md-3 col-2" id="border1">
+                    <p class="auto">Automatik</p>
+                    <br>
+                    <div class="col-md-4">
+                    <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider round"></span>
+                    </label>
+                    </div>
+                </div>
+                <div class="col-md-6 col-7 range">
+                    <p>Dauer[min]</p>
+                    <div class="range-slider">
+                      0 <input class="range-slider__range" type="range" value="0" min="0" max="60"> 60
+                      <span class="range-slider__value">0</span>
+                    </div>
+                    <p>Frequenz</p>
+                    <div class="row">
+                        <div class="col-md-5 col-5"><label class="container2">Jeden Tag
+                               <input type="radio" checked="checked" name="radio">
+                               <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-md-7 col-6" style="padding: 0px !important;"><label class="container2">Jeden zweiten Tag
+                                <input type="radio" name="radio">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+
+
+                </div>
+        </div>
+	    <div class="col-md-12 space">
+                <div class="col-md-3 col-3" id="border">
+                    <h1 class="ventil">Ventil 6</h1>
+
+                    <p class="description">Small
+                    Description text
+                    of Water circuit</p>
+                </div>
+                <div class="col-md-3 col-2" id="border1">
+                    <p class="auto">Automatik</p>
+                    <br>
+                    <div class="col-md-4">
+                    <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider round"></span>
+                    </label>
+                    </div>
+                </div>
+                <div class="col-md-6 col-7 range">
+                    <p>Dauer[min]</p>
+                    <div class="range-slider">
+                      0 <input class="range-slider__range" type="range" value="0" min="0" max="60"> 60
+                      <span class="range-slider__value">0</span>
+                    </div>
+                    <p>Frequenz</p>
+                    <div class="row">
+                        <div class="col-md-5 col-5"><label class="container2">Jeden Tag
+                               <input type="radio" checked="checked" name="radio">
+                               <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="col-md-7 col-6" style="padding: 0px !important;"><label class="container2">Jeden zweiten Tag
+                                <input type="radio" name="radio">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+
+
+                </div>
+        </div>
+
+</div>
+
+
+<div class="row" id="blank">
+
+</div>
+<div class="row" id="footer">
+	<div class="container1">
+		<div class="col-md-12">
+			<div class="col-md-3 col-3">
+				<p class="status">status :</p>
+			</div>
+			<div class="col-md-9 col-9">
+				<p class="footer-text">Dynamic content here (updated from Flask backend)
+  				If possible, 2 lines would be great</p>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
