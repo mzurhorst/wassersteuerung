@@ -250,7 +250,7 @@ input:checked + .slider:before {
 #footer{
 	background-color: #7da453;
 }
-.status{
+.status-clock{
 	font-size: 30px;
 	padding-left: 12px;
 }
@@ -402,7 +402,7 @@ h1{
   line-height: 25px;
   padding: 10px;
 }
-.status{
+.status-clock{
   font-size: 20px;
   padding-left: 0px;
   margin-top: 5px;
@@ -449,7 +449,7 @@ p{font-size: 12px;
 .container{
   max-width: 100% !important;
 }
-.status {
+.status-clock {
     font-size: 26px;
     padding-left: 13px;
 }

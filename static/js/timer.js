@@ -39,13 +39,15 @@ function updateClock() {
 
 function setTime() {
   currentdate = new Date(); 
-  var datetime = + currentdate.getDate() + "."
-                + (currentdate.getMonth()+1)  + "."
-                + currentdate.getFullYear() + " " 
-                + leadingzero(currentdate.getHours()) + ":" 
-                + leadingzero(currentdate.getMinutes()) + ":"
-                + leadingzero(currentdate.getSeconds());
-  $("#time1").text(datetime);
+
+  var time = 	+ leadingzero(currentdate.getHours()) + ":" 
+				+ leadingzero(currentdate.getMinutes());
+  $("#status-clock").text(time);
+  
+  var date = 	+ leadingzero(currentdate.getDate()) + "." 
+				+ leadingzero(currentdate.getMonth()) + "."
+				+ currentdate.getFullYear();
+  $("#status-date").text(date);
 };
 
 

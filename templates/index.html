@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <head>
-	<title></title>
+	<title>Gartenbewässerung</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="./static/css/design.css">
-	<link rel="stylesheet" type="text/css" href="./static/css/bootstrap.min.css">
-    <script type="text/javascript" src="./static/js/jquery-3.3.1.min.js"></script>
-	<script type="text/javascript" src="./static/js/bootstrap.min.js"></script>
-    <script src="./static/js/rangeslider.min.js"></script>
-
-
+	<link rel="stylesheet" type="text/css" href="../static/css/design.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css">
+    <script type="text/javascript" src="../static/js/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
+    <script src="../static/js/rangeslider.min.js"></script>
+	
+	<!-- Time functions for clock, tracker, ...  -->
+	<script type="text/javascript" src="../static/js/timer.js"></script>
 
 
 	<script>
@@ -386,11 +388,12 @@ rangeSlider();
         <div class="container1">
           <div class="col-md-12">
             <div class="col-md-3 col-3">
-              <p class="status">Status:</p>
+              <p id="status-clock" class="status-clock">23:49</p>
+			  <p id="status-date" class="status-date">11.09.2018</p>
             </div>
             <div class="col-md-9 col-9">
-              <p class="footer-text">Statuszeile 1 (vom Flask Backend)
-                Statuszeile 2</p>
+              <p class="footer-text">Statuszeile 1 (vom Flask Backend)</p>
+              <p class="footer-text">Statuszeile 2</p>
             </div>
           </div>
         </div>
